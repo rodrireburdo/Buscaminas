@@ -40,15 +40,17 @@ function App() {
   };  
   
   const verificarVictoria = (valoresNuevos) => {
+    // Verifica si todas las celdas no descubiertas son bombas
     const haGanado = valores.every((valor, i) => 
       valor === "*" || valoresNuevos[i].valor !== " "
     );
   
-    if (haGanado) {
-      setJuegoActivo(false); // Detiene el juego
+    if (haGanado && valoresNuevos.some((celda) => celda.valor !== " ")) { // Agrega condición de que haya movimientos
+      setJuegoActivo(false);
       alert("¡Felicidades, ganaste!");
     }
   };
+  
 
   // Función para marcar una celda con "/"
   const marcarCelda = (index) => {
@@ -137,9 +139,10 @@ function App() {
   useState(() => {
     const tamano = 25;
     const numBombas = 5;
-    setValores(generarTablero(tamano, numBombas));
+    const nuevoTablero = generarTablero(tamano, numBombas);
+    setValores(nuevoTablero);
+    setMapaValores(Array(tamano).fill({ valor: " ", marcada: false })); // Inicializa correctamente
   }, []);
-  
 
   return (
     <div className="container text-center" style={{ width: 340 }}>
